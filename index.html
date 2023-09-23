@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ==" crossorigin=""/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-measure@3.1.0/dist/leaflet-measure.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js" integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw==" crossorigin=""></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet-measure@3.1.0/dist/leaflet-measure.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.9.0/proj4.min.js" integrity="sha512-Y/B11KRfeaNHAonSdwnF0fvpzsA+W27fqfMPmfkxRAwuySCcA7aT9LfJcWz5fi32McMI02jngFYj7LYT1z+VVg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/perliedman-leaflet-control-geocoder/2.4.0/Control.Geocoder.min.js"
+        integrity="sha512-Pwbi+LtFQRtPHuYkIIwns8XTgCPEV2Eqp4Sk/JovY+pbG6buhvnOfqKLXzo08GvodwJbBu+y3omGBAj4F4Xyig=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <title>Parcel Viewer</title>
+</head>
+
+<body>
+    <nav class="navbar">
+        <img src="img/Swift Geo-03.png" alt="Company Logo" class="company-logo">
+    </nav>
+
+    <div class="split-panel">
+        <div class="left-pane">
+            <div class="section">
+                <button class="toggle" onclick="toggleSection('option1-content')">Option 1: Polygon by Coordinates</button>
+                <div id="option1-content" class="content">
+
+                    <div id="option1-srs" class="panel-collapse collapse">
+                        <label>Select Coordinate System:</label>
+                        <select id="coordSystemOption1" onchange="updateCoordSystem1(this.value)">
+                            
+                            <option value="epsg:26331">Minna / UTM zone 31N (EPSG:26331)</option>
+                            <option value="epsg:26332">Minna / UTM zone 32N (EPSG:26332)</option>
+                            <option value="epsg:32631">WGS 84 / UTM zone 31N (EPSG:32631)</option>
+                            <option value="epsg:32632">WGS 84 / UTM zone 32N (EPSG:32632)</option>
+                            <option value="epsg:4326">WGS 84 (EPSG:4326)</option>
+                            
+                        </select>
+                    
+                    </div>
+
+                    <div id="coordinate-pair-1" class="coordinate-pair all-coordinates">
+                        <label>1. Easting: <input type="number" class="easting"></label>
+                        <label> Northing: <input type="number" class="northing"></label>
+                    </div>
+                    <div id="coordinate-pair-2" class="coordinate-pair all-coordinates">
+                        <label>2. Easting: <input type="number" class="easting"></label>
+                        <label> Northing: <input type="number" class="northing"></label>
+                    </div>
+                    <div id="coordinate-pair-3" class="coordinate-pair all-coordinates">
+                        <label>3. Easting: <input type="number" class="easting"></label>
+                        <label> Northing: <input type="number" class="northing"></label>
+                    </div>
+                    <div id="coordinate-pair-4" class="coordinate-pair all-coordinates">
+                        <label>4. Easting: <input type="number" class="easting"></label>
+                        <label> Northing: <input type="number" class="northing"></label>
+                    </div>
+                
+                    <button id="addPair">Add Pair</button>
+                    <button id="removePair">Remove Pair</button>
+                </div>
+            </div>
+    
+            <div class="section">
+                <button class="toggle" onclick="toggleSection('option2-content')">Option 2: Polygon by Bearing & Distance</button>
+                <div id="option2-content" class="content">
+
+                    <div id="option2-srs" class="panel-collapse collapse">
+                        <label>Select Coordinate System:</label>
+                        <select id="coordSystemOption1" onchange="updateCoordSystem2(this.value)">
+                            
+                            <option value="epsg:26331">Minna / UTM zone 31N (EPSG:26331)</option>
+                            <option value="epsg:26332">Minna / UTM zone 32N (EPSG:26332)</option>
+                            <option value="epsg:32631">WGS 84 / UTM zone 31N (EPSG:32631)</option>
+                            <option value="epsg:32632">WGS 84 / UTM zone 32N (EPSG:32632)</option>
+                            <option value="epsg:4326">WGS 84 (EPSG:4326)</option>
+                            
+                        </select>
+                    
+                    </div>
+
+                    <div class="coordinate-pair">
+                        <label>Easting: <input type="number" id="initial-easting"></label>
+                        <label>Northing: <input type="number" id="initial-northing"></label>
+                    </div>
+                
+                    <div id="bearing-distance-pair-2" class="bearing-distance-pair">
+                        <label>2. Bearing : <input type="text" class="bearing"></label>
+                        <label>Distance: <input type="number" class="distance"></label>
+                    </div>
+                    <div id="bearing-distance-pair-3" class="bearing-distance-pair">
+                        <label>3. Bearing : <input type="text" class="bearing"></label>
+                        <label>Distance: <input type="number" class="distance"></label>
+                    </div>
+                    <div id="bearing-distance-pair-4" class="bearing-distance-pair">
+                        <label>4. Bearing : <input type="text" class="bearing"></label>
+                        <label>Distance: <input type="number" class="distance"></label>
+                    </div>
+
+                
+                    <button id="addBearingDistance">Add Pair</button>
+                    <button id="removeBearingDistance">Remove Pair</button>
+                
+                </div>
+            </div>
+    
+            <button id="viewButton">View</button>
+        </div>
+
+        <div class="resizer"></div>
+
+        <div class="right-pane">
+            <div id="map"></div>
+        </div>
+    </div>
+
+    <script src="js/scripts.js"></script>
+</body>
+
+</html>
