@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+    <title>Coordinate Calculator</title>
+</head>
+
+<body class="container mt-5">
+    <h2 class="text-center mb-4">Coordinate Calculator</h2>
+
+    <form id="coordinateForm">
+        <div class="col-md-6 form-group justify-center">
+            <div class="coord">
+                <label for="Easting">Starting Coordinates:</label>
+                <input type="text" class="form-control" id="easting"
+                    placeholder="Enter starting Easting coordinates (x)" required>
+            </div>
+            <div class="coord">
+                <label for="Northing">Starting Coordinates:</label>
+                <input type="text" class="form-control" id="northing"
+                    placeholder="Enter starting Easting coordinates (y)" required>
+            </div>
+
+            <div>
+                <label for='backCheckbox'>
+                    Backward Bearing
+                </label>
+                <input type="checkbox" id="backCheckbox">
+
+            </div>
+
+        </div>
+
+
+        <div class="form-row bearing-distance-pair">
+            <div id="bearing-distance-pair-1 " class="col-md-3 form-group">
+                <label for="inputBearing">Bearing:</label>
+                <input type="text" class="form-control bearing" id="inputBearing" placeholder="Enter bearing (0-360)"
+                    oninput="calculateCoordinates(0)" required>
+            </div>
+            <div class="col-md-3 form-group">
+                <label for="inputDistance">Distance (in meters):</label>
+                <input type="number" class="form-control distance" id="inputDistance" placeholder="Enter distance"
+                    oninput="calculateCoordinates(0)" required>
+            </div>
+            <div class="col-md-3 form-group">
+                <label for="calculatedCoordinates">Calculated Coordinates:</label>
+                <textarea class="form-control coord-text" id="calculatedCoordinates0" rows="1" readonly></textarea>
+
+            </div>
+            <div class="col-md-3 form-group align-end">
+                <button type="button" class="btn btn-danger mt-1" onclick="deleteInputSet(0)">Delete</button>
+            </div>
+        </div>
+    </form>
+
+    <button type="button" class="btn btn-success mt-3" onclick="addInputSet()">Add More</button>
+
+    <script>
+
+    </script>
+    <script src="script.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.8/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>
