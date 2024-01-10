@@ -1,0 +1,23 @@
+.align-end{
+    align-items: end;
+    display: flex;
+    flex-direction: row;
+}
+
+.justify-center {
+    align-items: end;
+    display: flex;
+    flex-direction: row;
+}
+
+.coord{
+    margin: 0px 1rem;
+}
+
+#easting, #northing {
+    width: 18rem;
+}
+
+#backCheckbox{
+    transform: scale(2);
+}
