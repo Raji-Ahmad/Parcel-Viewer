@@ -39,6 +39,10 @@
                             <option value="epsg:26332">Minna / UTM zone 32N (EPSG:26332)</option>
                             <option value="epsg:32631">WGS 84 / UTM zone 31N (EPSG:32631)</option>
                             <option value="epsg:32632">WGS 84 / UTM zone 32N (EPSG:32632)</option>
+                            <option value="epsg:32633">WGS 84 / UTM zone 33N (EPSG:32633)</option>
+                            <option value="epsg:26391">Nigeria West Belt (EPSG:26391)</option>
+                            <option value="epsg:26392">Nigeria Mid Belt (EPSG:26392)</option>
+                            <option value="epsg:26393">Nigeria East Belt (EPSG:26393)</option>
                             <option value="epsg:4326">WGS 84 (EPSG:4326)</option>
                             
                         </select>
@@ -62,8 +66,8 @@
                         <label> Northing: <input type="number" class="northing"></label>
                     </div>
                 
-                    <button id="addPair">Add Pair</button>
-                    <button id="removePair">Remove Pair</button>
+                    <button id="addCoordinatePair">Add Pair</button>
+                    <button id="removeCoordinatePair">Remove Pair</button>
                 </div>
             </div>
     
@@ -79,6 +83,10 @@
                             <option value="epsg:26332">Minna / UTM zone 32N (EPSG:26332)</option>
                             <option value="epsg:32631">WGS 84 / UTM zone 31N (EPSG:32631)</option>
                             <option value="epsg:32632">WGS 84 / UTM zone 32N (EPSG:32632)</option>
+                            <option value="epsg:32633">WGS 84 / UTM zone 33N (EPSG:32633)</option>
+                            <option value="epsg:26391">Nigeria West Belt (EPSG:26391)</option>
+                            <option value="epsg:26392">Nigeria Mid Belt (EPSG:26392)</option>
+                            <option value="epsg:26393">Nigeria East Belt (EPSG:26393)</option>
                             <option value="epsg:4326">WGS 84 (EPSG:4326)</option>
                             
                         </select>
@@ -106,6 +114,39 @@
                 
                     <button id="addBearingDistance">Add Pair</button>
                     <button id="removeBearingDistance">Remove Pair</button>
+                
+                </div>
+            </div>
+
+            <div class="section">
+                <button class="toggle" onclick="toggleSection('option3-content')">Option 3: Plot point</button>
+                <div id="option3-content" class="content">
+
+                    <div id="option3-srs" class="panel-collapse collapse">
+                        <label>Select Coordinate System:</label>
+                        <select id="coordSystemOption3" onchange="updateCoordSystem3(this.value)">
+                            
+                            <option value="epsg:26331">Minna / UTM zone 31N (EPSG:26331)</option>
+                            <option value="epsg:26332">Minna / UTM zone 32N (EPSG:26332)</option>
+                            <option value="epsg:32631">WGS 84 / UTM zone 31N (EPSG:32631)</option>
+                            <option value="epsg:32632">WGS 84 / UTM zone 32N (EPSG:32632)</option>
+                            <option value="epsg:32633">WGS 84 / UTM zone 33N (EPSG:32633)</option>
+                            <option value="epsg:26391">Nigeria West Belt (EPSG:26391)</option>
+                            <option value="epsg:26392">Nigeria Mid Belt (EPSG:26392)</option>
+                            <option value="epsg:26393">Nigeria East Belt (EPSG:26393)</option>
+                            <option value="epsg:4326">WGS 84 (EPSG:4326)</option>
+                            
+                        </select>
+                    
+                    </div>
+
+                    <div class="coordinate-pair all-coordinates2">
+                        <label>Easting: <input type="number" class="easting"></label>
+                        <label>Northing: <input type="number" class="northing"></label>
+                    </div>
+                
+                    <button id="addCoordinatePair2">Add Pair</button>
+                    <button id="removeCoordinatePair2">Remove Pair</button>
                 
                 </div>
             </div>
