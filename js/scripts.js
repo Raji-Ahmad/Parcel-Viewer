@@ -1,13 +1,18 @@
 
 let isResizing = false;
 let coordPairCounter = 4; // as we start with 4 pairs
+let coordPairCounter2 = 1; // as we start with 4 pairs
 let bearingDistanceCounter = 4;
 let activeOption;
 var map;
+
 let selectedCoordSystem1 = "epsg:26331"; // default value for option1
 let selectedCoordSystem2 = "epsg:26331"; // default value for option2
+let selectedCoordSystem3 = "epsg:26331"; // default value for option2
 let w = 1;
-
+let geoJsonLayer;
+// let adminURL = "https://portal.swiftgeoint.com/geoserver/geonode/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=geonode:nigeria_local_administrative_boundary&maxFeatures=50&outputFormat=application/json"
+let adminURL = "https://geoserver.ahmadraji.com/geoserver/Nigeria/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=Nigeria:AdminLevel2&maxFeatures=50&outputFormat=application/json"
 
 proj4.defs("EPSG:3857", "+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs");
 proj4.defs("EPSG:32631", "+proj=utm +zone=31 +datum=WGS84 +units=m +no_defs");
@@ -15,6 +20,9 @@ proj4.defs("EPSG:32632", "+proj=utm +zone=32 +datum=WGS84 +units=m +no_defs");
 proj4.defs("EPSG:32633", "+proj=utm +zone=33 +datum=WGS84 +units=m +no_defs");
 proj4.defs("EPSG:26331", "+proj=utm +zone=31 +ellps=clrk80 +towgs84=-92,-93,122,0,0,0,0 +units=m +no_defs");
 proj4.defs("EPSG:26332", "+proj=utm +zone=32 +ellps=clrk80 +towgs84=-92,-93,122,0,0,0,0 +units=m +no_defs");
+proj4.defs("EPSG:26391", "+proj=tmerc +lat_0=4 +lon_0=4.5 +k=0.99975 +x_0=230738.26 +y_0=0 +ellps=clrk80 +towgs84=-92,-93,122,0,0,0,0 +units=m +no_defs ");
+proj4.defs("EPSG:26392", "+proj=tmerc +lat_0=4 +lon_0=8.5 +k=0.99975 +x_0=670553.98 +y_0=0 +ellps=clrk80 +towgs84=-92,-93,122,0,0,0,0 +units=m +no_defs ");
+proj4.defs("EPSG:26393", "+proj=tmerc +lat_0=4 +lon_0=12.5 +k=0.99975 +x_0=1110369.7 +y_0=0 +ellps=clrk80 +towgs84=-92,-93,122,0,0,0,0 +units=m +no_defs ");
 
 function getRandomColor() {
     {
@@ -58,6 +66,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var parcels = new L.FeatureGroup().addTo(map);
     var drawnItems = new L.FeatureGroup().addTo(map);
+    var markerGroup = L.layerGroup().addTo(map);
 
 
 
@@ -141,6 +150,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 coords = getBDCoordinates();
                 coords = convertToLatLongMultiple(coords, selectedCoordSystem2.toUpperCase())
                 break;
+            case 'option3-content':
+                coords = getCoordinates();
+                coords = convertToLatLongMultiple(coords, selectedCoordSystem3.toUpperCase())
+                break;
             default:
                 return
         }
@@ -156,18 +169,56 @@ document.addEventListener("DOMContentLoaded", function () {
         //     [51.51, -0.047]
         // ];
 
-        let parcel_color = '#a41a1a';
+        if (activeOption=='option3-content'){
+            plotPointsOnMap(coords)
+        }
+        else{
+            let parcel_color = '#a41a1a';
 
         parcels.clearLayers();
         L.polygon(coords, { color: 'red' }).addTo(parcels);
         map.fitBounds(parcels.getBounds());
+        }
+        
     });
 
     // Handle Option 2 by using turf.js for calculations using the bearing and distance
+    function plotPointsOnMap(coordinates, showAdmin=true){
+
+        markerGroup.clearLayers();
+        // Plot each coordinate on the map
+        for (var i = 0; i < coordinates.length; i++) {
+          var marker = L.marker(coordinates[i]);
+          markerGroup.addLayer(marker);
+          // You can customize the marker icon or popup content here if needed
+        }
+    filterCoord = coordinates[0]
+    var filterUrl = adminURL + `&CQL_FILTER=INTERSECTS(the_geom, POINT(${filterCoord[1]} ${filterCoord[0]}))`
+    
+    if (geoJsonLayer) {
+        map.removeLayer(geoJsonLayer);
+      }
+
+    fetch(filterUrl)
+    .then(response => response.json())
+    .then(data => {
+        geoJsonLayer = L.geoJSON(data, {
+        onEachFeature: function (feature, layer) {
+          if (feature.properties && feature.properties.admin2Name) {
+            layer.bindPopup(`${feature.properties.admin2Name} in ${feature.properties.admin1Name} state`);
+          }
+        }
+      }).addTo(map);
+    })
+    .catch(error => console.error('Error fetching GeoJSON data:', error));
+    
+    }
 });
 
+
+
 function toggleSection(id) {
-    const sections = ['option1-content', 'option2-content'];
+    const sections = ['option1-content', 'option2-content', 'option3-content'];
 
     sections.forEach(sectionId => {
         const sectionContent = document.getElementById(sectionId);
@@ -208,7 +259,7 @@ function handleMouseMove(event) {
 }
 
 
-document.getElementById('addPair').addEventListener('click', function () {
+document.getElementById('addCoordinatePair').addEventListener('click', function (e) {
     coordPairCounter++;
     const newPair = document.createElement('div');
     newPair.className = 'coordinate-pair all-coordinates';
@@ -220,7 +271,7 @@ document.getElementById('addPair').addEventListener('click', function () {
     document.getElementById('option1-content').insertBefore(newPair, document.getElementById('addPair'));
 });
 
-document.getElementById('removePair').addEventListener('click', function () {
+document.getElementById('removeCoordinatePair').addEventListener('click', function (e) {
     if (coordPairCounter > 1) { // Prevent removing all pairs
         const pairToRemove = document.getElementById(`coordinate-pair-${coordPairCounter}`);
         pairToRemove.parentNode.removeChild(pairToRemove);
@@ -228,10 +279,37 @@ document.getElementById('removePair').addEventListener('click', function () {
     }
 });
 
+document.getElementById('addCoordinatePair2').addEventListener('click', function (e) {
+    coordPairCounter2++;
+    const newPair = document.createElement('div');
+    newPair.className = 'coordinate-pair all-coordinates2';
+    newPair.id = `coordinate-pair2-${coordPairCounter2}`;
+    newPair.innerHTML = `
+        <label>${coordPairCounter2}. Easting: <input type="number" class="easting"></label>
+        <label> Northing: <input type="number" class="northing"></label>
+    `;
+    document.getElementById('option3-content').insertBefore(newPair, document.getElementById('addCoordinatePair2'));
+});
+
+document.getElementById('removeCoordinatePair2').addEventListener('click', function (e) {
+    if (coordPairCounter2 > 1) { // Prevent removing all pairs
+        const pairToRemove = document.getElementById(`coordinate-pair2-${coordPairCounter2}`);
+        pairToRemove.parentNode.removeChild(pairToRemove);
+        coordPairCounter2--;
+    }
+});
+
 
 function getCoordinates() {
+    if (activeOption == 'option1-content'){
+        var _sel = '.all-coordinates'
+    }
+    else {
+        var _sel = '.all-coordinates2'
+    }
+
     const coordinates = [];
-    const pairs = document.querySelectorAll('.all-coordinates');
+    const pairs = document.querySelectorAll(_sel);
 
     pairs.forEach(pair => {
         const easting = pair.querySelector('.easting').value;
@@ -395,6 +473,11 @@ function updateCoordSystem1(value) {
 function updateCoordSystem2(value) {
     selectedCoordSystem2 = value;
     console.log("Selected Coordinate System:", selectedCoordSystem2); // Just for debugging. You can remove this line.
+}
+
+function updateCoordSystem3(value) {
+    selectedCoordSystem3 = value;
+    console.log("Selected Coordinate System:", selectedCoordSystem3); // Just for debugging. You can remove this line.
 }
 
 
