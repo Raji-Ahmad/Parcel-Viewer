@@ -12,7 +12,9 @@ let selectedCoordSystem3 = "epsg:26331"; // default value for option2
 let w = 1;
 let geoJsonLayer;
 //let adminURL = "https://portal.swiftgeoint.com/geoserver/geonode/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=geonode:nigeria_local_administrative_boundary&maxFeatures=50&outputFormat=application/json"
-let adminURL = "https://geoserver.ahmadraji.com/geoserver/Nigeria/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=Nigeria:AdminLevel2&maxFeatures=50&outputFormat=application/json"
+//let adminURL = "https://geoserver.ahmadraji.com/geoserver/Nigeria/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=Nigeria:AdminLevel2&maxFeatures=50&outputFormat=application/json"
+let adminURL = "https://geoserver.ahmadraji.com/geoserver/geonode/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=geonode:nigeria_local_administrative_boundary&maxFeatures=50&outputFormat=application/json"
+
 
 proj4.defs("EPSG:3857", "+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs");
 proj4.defs("EPSG:32631", "+proj=utm +zone=31 +datum=WGS84 +units=m +no_defs");
