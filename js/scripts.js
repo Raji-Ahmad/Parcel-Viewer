@@ -195,7 +195,7 @@ document.addEventListener("DOMContentLoaded", function () {
           // You can customize the marker icon or popup content here if needed
         }
     filterCoord = coordinates[0]
-    var filterUrl = adminURL + `&CQL_FILTER=INTERSECTS(the_geom, POINT(${filterCoord[1]} ${filterCoord[0]}))`
+    var filterUrl = adminURL + `&CQL_FILTER=INTERSECTS(geometry, POINT(${filterCoord[1]} ${filterCoord[0]}))`
     
     if (geoJsonLayer) {
         map.removeLayer(geoJsonLayer);
