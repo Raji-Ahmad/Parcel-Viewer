@@ -206,8 +206,8 @@ document.addEventListener("DOMContentLoaded", function () {
     .then(data => {
         geoJsonLayer = L.geoJSON(data, {
         onEachFeature: function (feature, layer) {
-          if (feature.properties && feature.properties.admin2Name) {
-            layer.bindPopup(`${feature.properties.admin2Name} in ${feature.properties.admin1Name} state`);
+          if (feature.properties && feature.properties.admin2name) {
+            layer.bindPopup(`${feature.properties.admin2name} in ${feature.properties.admin1name} state`);
           }
         }
       }).addTo(map);
